@@ -73,7 +73,7 @@ try {
     console.error(JSON.stringify(error.flatten().fieldErrors, null, 2))
 
     // More detailed error messages
-    error.errors.forEach((err) => {
+    error.issues.forEach((err) => {
       const path = err.path.join('.')
       console.error(`  ${path}: ${err.message}`)
     })
