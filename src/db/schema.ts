@@ -10,6 +10,8 @@ import {
 import { name, relations } from 'drizzle-orm'
 import fi from 'zod/v4/locales/fi.cjs';
 import { ta } from 'zod/v4/locales/index.js';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+
 
 // Users table - core authentication and profile
 export const users = pgTable('users', {
@@ -106,3 +108,62 @@ export const habitTagsRelations = relations(habitTags, ({ one }) => ({
     references: [tags.id],
   }),
 }))
+
+
+
+// -- TypeScript Integration
+// Infer types from schema
+export type User = typeof users.$inferSelect
+export type NewUser = typeof users.$inferInsert
+  
+export type Habit = typeof habits.$inferSelect
+export type NewHabit = typeof habits.$inferInsert
+
+
+// -- Zod Integration
+// Auto-generate Zod schemas from Drizzle tables
+export const insertUserSchema = createInsertSchema(users)
+export const selectUserSchema = createSelectSchema(users)
+
+/*
+// Customize validation
+export const createUserSchema = insertUserSchema.extend({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
+
+// Use in API validation
+app.post('/users', validateBody(createUserSchema), async (req, res) => {
+  // req.body is fully typed and validated
+  const user = await createUser(req.body)
+  res.json(user)
+})
+
+// -- Using Relations in Queries
+// Get user with all their habits and tags
+const userWithData = await db.query.users.findFirst({
+  where: eq(users.id, userId),
+  with: {
+    habits: {
+      with: {
+        entries: true,
+        habitTags: {
+          with: {
+            tag: true
+          }
+        }
+      }
+    }
+  }
+})
+
+// Result has perfect TypeScript types:
+user.habits[0].entries[0].note           // ✅ string | null
+user.habits[0].habitTags[0].tag.color    // ✅ string
+
+// Usage in functions
+const createUser = async (userData: NewUser): Promise<User> => {
+  const [user] = await db.insert(users).values(userData).returning()
+  return user
+}
+  */
