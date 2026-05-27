@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { validateBody, validateParams } from '../middleware/validation.ts'
+import { authenticateToken } from '../middleware/auth.ts';
 
 // Define validation schemas
 const createUserSchema = z.object({
@@ -14,6 +15,7 @@ const userIdSchema = z.object({
 })
 
 const router = Router()
+router.use(authenticateToken) // Apply authentication middleware to all user routes
 
 router.get('/', (req, res) => {
   res.json({ message: 'users' })

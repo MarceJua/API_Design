@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { validateBody, validateParams } from '../middleware/validation.ts'
 import { name } from 'drizzle-orm';
+import { authenticateToken } from '../middleware/auth.ts'
 
 
 // Define validation schemas
@@ -14,6 +15,8 @@ const completeParamSchema = z.object({
 })
 
 const router = Router()
+
+router.use(authenticateToken) // Apply authentication middleware to all habit routes
 
 router.get('/', (req, res) => {
   res.json({ message: 'habits' })
