@@ -33,7 +33,6 @@ export const createHabitSchema = z.object({
     z.literal('weekly'),
     z.literal('monthly')
   ], {
-    // 👇 Solución: Usamos "message" directo, tal como lo pide TypeScript
     message: 'Frequency must be daily, weekly, or monthly'
   }),
   
