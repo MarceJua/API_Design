@@ -9,7 +9,6 @@ import {
   getHabitById,
   updateHabit,
   deleteHabit,
-  logHabitCompletion,
   completeHabit,
   getHabitsByTag,
   addTagsToHabit,
@@ -89,6 +88,15 @@ router.post(
   validateParams(uuidSchema),
   validateBody(z.object({ tagIds: z.array(z.string().uuid()).min(1) })),
   addTagsToHabit
+)
+
+router.delete(
+  '/:id/tags/:tagId',
+  validateParams(z.object({ 
+    id: z.string().uuid(),
+    tagId: z.string().uuid() 
+  })),
+  removeTagFromHabit
 )
 
 export default router

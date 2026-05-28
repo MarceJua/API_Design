@@ -192,5 +192,40 @@ export const getPopularTags = async (req: Request, res: Response) => {
 }
 
 //get tag habits
-export const getTagHabits = async (req: Request, res: Response) => {
+// Obtener todos los hábitos que pertenecen al usuario y tienen este tag
+export const getTagHabits = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id: tagId } = req.params
+    const userId = req.user!.id
+
+    // Verificar si el tag existe
+    const tag = await db.query.tags.findFirst({
+      where: eq(tags.id, tagId)
+    })
+
+    if (!tag) {
+      return res.status(404).json({ error: 'Tag not found' })
+    }
+
+    // Buscar relaciones en la tabla pivote, trayendo el hábito
+    const relations = await db.query.habitTags.findMany({
+      where: eq(habitTags.tagId, tagId),
+      with: {
+        habit: true
+      }
+    })
+
+    // Extraer los hábitos y asegurar que solo sean los del usuario actual
+    const userHabits = relations
+      .map(relation => relation.habit)
+      .filter(habit => habit.userId === userId)
+
+    res.json({
+      tag,
+      habits: userHabits
+    })
+  } catch (error) {
+    console.error('Get tag habits error:', error)
+    res.status(500).json({ error: 'Failed to fetch habits for this tag' })
+  }
 }
