@@ -7,9 +7,11 @@
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
   }
 }
