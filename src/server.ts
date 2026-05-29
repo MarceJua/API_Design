@@ -6,7 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import {  env, isDev, isTestEnv } from '../env.ts'
-import { APIError, errorHandler } from './middleware/errorHandler.ts';
+import { errorHandler } from './middleware/errorHandler.ts';
 
 const app = express()
 app.use(helmet())
@@ -25,9 +25,10 @@ app.use(
   })
 )
 
+/*
 app.use((_, __, next) => {
   next(new APIError('This is a test error', 'validationError', 400))
-})
+})*/
 
 // Health check endpoint
 app.get('/health', (req, res) => {
