@@ -37,7 +37,7 @@ export const errorHandler = (
     }),
   })
 }
-
+/*
 // Custom API Error class for consistent error handling (another way to create custom errors)
 export class APIError extends Error {
     status: number
@@ -49,4 +49,4 @@ export class APIError extends Error {
         this.name = name
         this.message = message
     }
-}
+}*/
